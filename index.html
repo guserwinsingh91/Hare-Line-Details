@@ -19,9 +19,14 @@ body {
   border: 1px solid #ddd;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .title {
   font-weight: bold;
-  color: #2c3e50;
 }
 
 .date {
@@ -29,9 +34,20 @@ body {
   font-size: 14px;
 }
 
-.location {
-  color: #007BFF;
-  font-weight: bold;
+.button {
+  background: #007BFF;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.details {
+  margin-top: 10px;
+  padding-left: 15px;
+  border-left: 2px solid #ddd;
+  display: none;
 }
 </style>
 </head>
@@ -47,19 +63,36 @@ fetch("https://script.google.com/macros/s/AKfycbwm3fDolDcWT0DZ0K7o7wKSC3qa7ADKrc
   .then(data => {
     let html = "";
 
-    data.slice(1).forEach(row => {
+    data.slice(1).forEach((row, index) => {
       html += `
         <div class="card">
-          <div class="title">${row[0]}</div>
+          <div class="header">
+            <div class="title">${row[0]}</div>
+            <button class="button" onclick="toggleDetails(${index})">View</button>
+          </div>
+
           <div class="date">${row[1]}</div>
-          <div>${row[2]}</div>
-          <div class="location">${row[3]}</div>
+
+          <div id="details-${index}" class="details">
+            <div><b>Location:</b> ${row[2]}</div>
+            <div><b>Description:</b> ${row[3]}</div>
+          </div>
         </div>
       `;
     });
 
     document.getElementById("events").innerHTML = html;
   });
+
+function toggleDetails(index) {
+  const el = document.getElementById("details-" + index);
+
+  if (el.style.display === "none") {
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
+}
 </script>
 
 </body>
