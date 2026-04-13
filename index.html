@@ -1,82 +1,135 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Events</title>
+<title>Event List</title>
 
 <style>
 body {
-  font-family: Arial;
-  background: #f5f6fa;
-  padding: 10px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #eef2f7;
+  margin: 0;
+  padding: 15px;
 }
 
+/* Header */
+.header-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Card */
 .card {
   background: white;
+  border-radius: 12px;
   padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: 0.2s;
 }
 
-.header {
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Top Row */
+.top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Title */
 .title {
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 16px;
+  color: #2c3e50;
 }
 
+/* Date badge */
 .date {
-  color: gray;
-  font-size: 14px;
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  background: #eaf3ff;
+  color: #007BFF;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
 
+/* Button */
 .button {
   background: #007BFF;
   color: white;
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 12px;
 }
 
+.button:hover {
+  background: #0056b3;
+}
+
+/* Details section */
 .details {
   margin-top: 10px;
-  padding-left: 15px;
-  border-left: 2px solid #ddd;
+  padding: 10px;
+  background: #f9fbfd;
+  border-radius: 8px;
   display: none;
+  font-size: 14px;
+  animation: fadeIn 0.3s ease;
+}
+
+.details div {
+  margin-bottom: 6px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
+
 </head>
 
 <body>
 
-<h2>Event List</h2>
-<div id="events"></div>
+<div class="header-title">📅 Event List</div>
+
+<div id="events">Loading events...</div>
 
 <script>
 fetch("https://script.google.com/macros/s/AKfycbwm3fDolDcWT0DZ0K7o7wKSC3qa7ADKrckzcMdBGei_mK-C8PI6K3Z3uNuzqPW9JI3S/exec")
   .then(res => res.json())
   .then(data => {
+
     let html = "";
 
     data.slice(1).forEach((row, index) => {
+
       html += `
         <div class="card">
-          <div class="header">
+          
+          <div class="top-row">
             <div class="title">${row[0]}</div>
-            <button class="button" onclick="toggleDetails(${index})">View</button>
+            <button class="button" onclick="toggleDetails(${index}, this)">View</button>
           </div>
 
           <div class="date">${row[1]}</div>
 
           <div id="details-${index}" class="details">
-            <div><b>Location:</b> ${row[2]}</div>
-            <div><b>Description:</b> ${row[3]}</div>
+            <div><strong>📍 Location:</strong> ${row[2]}</div>
+            <div><strong>📝 Description:</strong> ${row[3]}</div>
           </div>
+
         </div>
       `;
     });
@@ -84,13 +137,15 @@ fetch("https://script.google.com/macros/s/AKfycbwm3fDolDcWT0DZ0K7o7wKSC3qa7ADKrc
     document.getElementById("events").innerHTML = html;
   });
 
-function toggleDetails(index) {
+function toggleDetails(index, btn) {
   const el = document.getElementById("details-" + index);
 
-  if (el.style.display === "none") {
+  if (el.style.display === "none" || el.style.display === "") {
     el.style.display = "block";
+    btn.innerText = "Hide";
   } else {
     el.style.display = "none";
+    btn.innerText = "View";
   }
 }
 </script>
