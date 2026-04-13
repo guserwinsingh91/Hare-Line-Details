@@ -11,16 +11,47 @@ body {
   background: linear-gradient(135deg, #667eea, #764ba2);
   margin: 0;
   padding: 15px;
-  color: #333;
 }
 
-/* Header */
+/* Title */
 .header-title {
   text-align: center;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
   color: white;
+}
+
+/* Layout container */
+.container {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+/* LEFT BLOCK */
+.left-block {
+  flex: 1;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 15px;
+  color: white;
+  min-width: 200px;
+}
+
+.left-block h3 {
+  margin-top: 0;
+}
+
+.left-block p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* RIGHT BLOCK */
+.right-block {
+  flex: 2;
 }
 
 /* Card */
@@ -37,21 +68,19 @@ body {
   transform: translateY(-3px);
 }
 
-/* Top Row */
+/* Top row */
 .top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Title */
 .title {
   font-weight: 600;
   font-size: 16px;
   color: #2c3e50;
 }
 
-/* Date badge */
 .date {
   display: inline-block;
   margin-top: 8px;
@@ -98,6 +127,13 @@ body {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
 </style>
 
 </head>
@@ -106,7 +142,28 @@ body {
 
 <div class="header-title">📅 Event List</div>
 
-<div id="events">Loading events...</div>
+<div class="container">
+
+  <!-- LEFT BLOCK -->
+
+  <div class="left-block">
+    <h3>📌 Information</h3>
+    <p>
+      Welcome to the event dashboard.<br><br>
+      Here you can view all upcoming events,
+      meeting schedules, and important updates
+      from the organization.<br><br>
+      Tap "View" to see event details.
+    </p>
+  </div>
+
+  <!-- RIGHT BLOCK -->
+
+  <div class="right-block">
+    <div id="events">Loading events...</div>
+  </div>
+
+</div>
 
 <script>
 fetch("https://script.google.com/macros/s/AKfycbwm3fDolDcWT0DZ0K7o7wKSC3qa7ADKrckzcMdBGei_mK-C8PI6K3Z3uNuzqPW9JI3S/exec")
@@ -119,7 +176,7 @@ fetch("https://script.google.com/macros/s/AKfycbwm3fDolDcWT0DZ0K7o7wKSC3qa7ADKrc
 
       html += `
         <div class="card">
-          
+
           <div class="top-row">
             <div class="title">${row[0]}</div>
             <button class="button" onclick="toggleDetails(${index}, this)">View</button>
@@ -137,10 +194,6 @@ fetch("https://script.google.com/macros/s/AKfycbwm3fDolDcWT0DZ0K7o7wKSC3qa7ADKrc
     });
 
     document.getElementById("events").innerHTML = html;
-  })
-  .catch(err => {
-    document.getElementById("events").innerHTML = "Failed to load data.";
-    console.error(err);
   });
 
 function toggleDetails(index, btn) {
