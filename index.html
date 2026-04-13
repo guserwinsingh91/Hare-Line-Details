@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Events</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f5f6fa;
+  padding: 10px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.title {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.date {
+  color: gray;
+  font-size: 14px;
+}
+
+.location {
+  color: #007BFF;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Event List</h2>
+<div id="events"></div>
+
+<script>
+fetch("https://script.google.com/macros/s/AKfycbwm3fDolDcWT0DZ0K7o7wKSC3qa7ADKrckzcMdBGei_mK-C8PI6K3Z3uNuzqPW9JI3S/exec")
+  .then(res => res.json())
+  .then(data => {
+    let html = "";
+
+    data.slice(1).forEach(row => {
+      html += `
+        <div class="card">
+          <div class="title">${row[0]}</div>
+          <div class="date">${row[1]}</div>
+          <div>${row[2]}</div>
+          <div class="location">${row[3]}</div>
+        </div>
+      `;
+    });
+
+    document.getElementById("events").innerHTML = html;
+  });
+</script>
+
+</body>
+</html>
