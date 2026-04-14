@@ -122,20 +122,6 @@ body {
   margin-bottom: 6px;
 }
 
-/* Avatar */
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-/* Name under title */
-.member-name {
-  font-size: 12px;
-  color: gray;
-}
-
 /* Animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }
@@ -161,10 +147,12 @@ body {
   <!-- LEFT BLOCK -->
 
   <div class="left-block">
-    <h3>📌 Kamunting Hash House Harriers and Harriets</h3>
+    <h3>📌 Information</h3>
     <p>
-      Welcome to the hare line dashboard.<br><br>
-      Here you can view all upcoming hare line events and important notice.<br><br>
+      Welcome to the event dashboard.<br><br>
+      Here you can view all upcoming events,
+      meeting schedules, and important updates
+      from the organization.<br><br>
       Tap "View" to see event details.
     </p>
   </div>
@@ -178,62 +166,27 @@ body {
 </div>
 
 <script>
-fetch("https://script.google.com/macros/s/AKfycbwm3fDolDcWT0DZ0K7o7wKSC3qa7ADKrckzcMdBGei_mK-C8PI6K3Z3uNuzqPW9JI3S/exec")
+fetch("YOUR_GOOGLE_SCRIPT_URL")
   .then(res => res.json())
   .then(data => {
 
-    const events = data.events;
-    const members = data.members;
-
-    // Create lookup map
-    let memberMap = {};
-
-    members.slice(1).forEach(row => {
-      const image = row[0];
-      const nickname = row[1];
-      const fullname = row[2];
-
-      memberMap[nickname] = image;
-      memberMap[fullname] = image;
-    });
-
     let html = "";
 
-    events.slice(1).forEach((row, index) => {
-
-      const eventName = row[0];
-      const date = row[1];
-      const location = row[2];
-      const description = row[3];
-      const memberName = row[4];
-
-      const image = memberMap[memberName] || "https://via.placeholder.com/40";
+    data.slice(1).forEach((row, index) => {
 
       html += `
         <div class="card">
 
           <div class="top-row">
-
-            <div style="display:flex; align-items:center; gap:10px;">
-              
-              <img src="${image}" class="avatar">
-
-              <div>
-                <div class="title">${eventName}</div>
-                <div class="member-name">${memberName}</div>
-              </div>
-
-            </div>
-
+            <div class="title">${row[0]}</div>
             <button class="button" onclick="toggleDetails(${index}, this)">View</button>
-
           </div>
 
-          <div class="date">${date}</div>
+          <div class="date">${row[1]}</div>
 
           <div id="details-${index}" class="details">
-            <div><strong>📍 Location:</strong> ${location}</div>
-            <div><strong>📝 Description:</strong> ${description}</div>
+            <div><strong>📍 Location:</strong> ${row[2]}</div>
+            <div><strong>📝 Description:</strong> ${row[3]}</div>
           </div>
 
         </div>
